@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32113.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseJson", "ParseJson\ParseJson.csproj", "{F1016339-8A6A-4AA3-84F3-C7A6408630F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseExpressions", "ParseExpressions\ParseExpressions.csproj", "{445B97BB-2D84-49BB-A52B-0D6F9932B927}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1016339-8A6A-4AA3-84F3-C7A6408630F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1016339-8A6A-4AA3-84F3-C7A6408630F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1016339-8A6A-4AA3-84F3-C7A6408630F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1016339-8A6A-4AA3-84F3-C7A6408630F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9675D746-24F7-49C9-8CCB-254DA188429B}
+	EndGlobalSection
+EndGlobal

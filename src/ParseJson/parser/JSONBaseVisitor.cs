@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from d:\repos-clones\getting-started-with-antlr-in-csharp\AntlrCSharp\JSON.g4 by ANTLR 4.8
+// Generated from d:\repos-clones\getting-started-with-antlr-in-csharp\src\ParseJson\JSON.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162

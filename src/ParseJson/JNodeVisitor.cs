@@ -4,9 +4,9 @@ using Antlr4.Runtime.Tree;
 
 namespace ParseJson
 {
-    public class BasicVisitor : IJSONVisitor<object>
+    public class JNodeVisitor : IJSONVisitor<JItem>
     {
-        public object Visit(IParseTree tree)
+        public JItem Visit(IParseTree tree)
         {
             if (tree.Payload is JSONParser.ArrContext arr)
             {
@@ -30,7 +30,7 @@ namespace ParseJson
             }
             else if (tree.Payload is CommonToken token)
             {
-                return token.Text.Trim('"');
+                return (JValue) token.Text.Trim('"');
             }
             else
             {
@@ -38,9 +38,9 @@ namespace ParseJson
             }
         }
 
-        public object VisitArr([NotNull] JSONParser.ArrContext context)
+        public JItem VisitArr([NotNull] JSONParser.ArrContext context)
         {
-            var list = new List<object>();
+            var list = new JList();
             for (var i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
@@ -53,49 +53,52 @@ namespace ParseJson
             return list;
         }
 
-        public object VisitChildren(IRuleNode node)
+        public JItem VisitChildren(IRuleNode node)
         {
             throw new NotImplementedException();
         }
 
-        public object VisitErrorNode(IErrorNode node)
+        public JItem VisitErrorNode(IErrorNode node)
         {
             throw new NotImplementedException();
         }
 
-        public object VisitJson([NotNull] JSONParser.JsonContext context)
+        public JItem VisitJson([NotNull] JSONParser.JsonContext context)
         {
             return VisitValue(context.value());
         }
 
-        public object VisitObj([NotNull] JSONParser.ObjContext context)
+        public JItem VisitObj([NotNull] JSONParser.ObjContext context)
         {
-            var dict = new Dictionary<string, object>();
+            var dict = new JNode();
             for (var i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
                 if (child is JSONParser.PairContext pair)
                 {
-                    var (name, value) = ((string, object)) VisitPair(pair);
-                    dict[name] = value;
+                    var name = pair.children[0].GetText().Trim('"');
+                    if (pair.children[1].Payload is JSONParser.ValueContext valueCtx)
+                        dict[name] = VisitValue(valueCtx);
+                    else if (pair.children[1].Payload is CommonToken vtx)
+                        dict[name] = (JValue) vtx.Text;
+                    else
+                        throw new NotImplementedException();
                 }
             }
             return dict;
         }
 
-        public object VisitPair([NotNull] JSONParser.PairContext context)
-        {
-            var name = context.GetChild(0).GetText().Trim('"');
-            var value = VisitValue(context.GetChild(2).Payload as JSONParser.ValueContext);
-            return (name, value);
-        }
-
-        public object VisitTerminal(ITerminalNode node)
+        public JItem VisitPair([NotNull] JSONParser.PairContext context)
         {
             throw new NotImplementedException();
         }
 
-        public object VisitValue([NotNull] JSONParser.ValueContext context)
+        public JItem VisitTerminal(ITerminalNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public JItem VisitValue([NotNull] JSONParser.ValueContext context)
         {
             var target = context.GetChild(0);
             if (target.Payload is JSONParser.ArrContext arr)
@@ -120,7 +123,7 @@ namespace ParseJson
             }
             else if (target.Payload is CommonToken token)
             {
-                return token.Text.Trim('"');
+                return (JValue) token.Text.Trim('"');
             }
             else
             {
