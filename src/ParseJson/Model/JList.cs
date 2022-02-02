@@ -5,10 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParseJson
+namespace ParseJson.Model
 {
     public class JList: JItem, IEnumerable<JItem>
     {
+        public JList()
+        {
+        }
+
+        public JList(params JItem[] items)
+        {
+            foreach (var item in items)
+                Add(item);
+        }
+
         private List<JItem> items;
 
         public JItem this[int index]

@@ -1,12 +1,15 @@
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using ParseJson.Model;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ParseJson
 {
-    public class JNodeVisitor : IJSONVisitor<JItem>
+    public class JsonVisitor : IJSONVisitor<Expression>
     {
-        public JItem Visit(IParseTree tree)
+        public Expression Visit(IParseTree tree)
         {
             if (tree.Payload is JSONParser.ArrContext arr)
             {
@@ -30,7 +33,7 @@ namespace ParseJson
             }
             else if (tree.Payload is CommonToken token)
             {
-                return (JValue) token.Text.Trim('"');
+                return Expression.New(typeof(JValue).GetConstructor(new Type[] { typeof(string) }), Expression.Constant(token.Text.Trim('"')));
             }
             else
             {
@@ -38,67 +41,70 @@ namespace ParseJson
             }
         }
 
-        public JItem VisitArr([NotNull] JSONParser.ArrContext context)
+        public Expression VisitArr([NotNull] JSONParser.ArrContext context)
         {
-            var list = new JList();
+            var ctor = typeof(JList).GetConstructors()[1];
+
+            var initializers = new List<Expression>();
             for (var i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
                 if (child is JSONParser.ValueContext value)
                 {
                     var v = VisitValue(value);
-                    list.Add(v);
+                    initializers.Add(v);
                 }
             }
-            return list;
+
+            return Expression.New(ctor, Expression.NewArrayInit(typeof(JItem), initializers.ToArray()));
         }
 
-        public JItem VisitChildren(IRuleNode node)
+        public Expression VisitChildren(IRuleNode node)
         {
             throw new NotImplementedException();
         }
 
-        public JItem VisitErrorNode(IErrorNode node)
+        public Expression VisitErrorNode(IErrorNode node)
         {
             throw new NotImplementedException();
         }
 
-        public JItem VisitJson([NotNull] JSONParser.JsonContext context)
+        public Expression VisitJson([NotNull] JSONParser.JsonContext context)
         {
             return VisitValue(context.value());
         }
 
-        public JItem VisitObj([NotNull] JSONParser.ObjContext context)
+        public Expression VisitObj([NotNull] JSONParser.ObjContext context)
         {
-            var dict = new JNode();
+            var ctor = typeof(JNode).GetConstructors()[0];
+            var ctorTuple = typeof(JNodeKV).GetConstructors()[0];
+
+            var initializers = new List<Expression>();
             for (var i = 0; i < context.ChildCount; i++)
             {
                 var child = context.GetChild(i);
                 if (child is JSONParser.PairContext pair)
                 {
-                    var name = pair.children[0].GetText().Trim('"');
-                    if (pair.children[1].Payload is JSONParser.ValueContext valueCtx)
-                        dict[name] = VisitValue(valueCtx);
-                    else if (pair.children[1].Payload is CommonToken vtx)
-                        dict[name] = (JValue) vtx.Text;
-                    else
-                        throw new NotImplementedException();
+                    var name = Expression.Constant(pair.GetChild(0).GetText().Trim('"'));
+                    var value = VisitValue(pair.GetChild(2).Payload as JSONParser.ValueContext);
+
+                    initializers.Add(Expression.New(ctorTuple, name, value));
                 }
             }
-            return dict;
+            return Expression.New(ctor, Expression.NewArrayInit(typeof(JNodeKV), initializers.ToArray()));
         }
 
-        public JItem VisitPair([NotNull] JSONParser.PairContext context)
+        public Expression VisitPair([NotNull] JSONParser.PairContext context)
         {
             throw new NotImplementedException();
         }
 
-        public JItem VisitTerminal(ITerminalNode node)
+        public Expression VisitTerminal(ITerminalNode node)
         {
             throw new NotImplementedException();
         }
 
-        public JItem VisitValue([NotNull] JSONParser.ValueContext context)
+        public Expression VisitValue([NotNull] JSONParser.ValueContext context)
         {
             var target = context.GetChild(0);
             if (target.Payload is JSONParser.ArrContext arr)
@@ -123,7 +129,9 @@ namespace ParseJson
             }
             else if (target.Payload is CommonToken token)
             {
-                return (JValue) token.Text.Trim('"');
+                var ctor = typeof(JValue).GetConstructors()[0];
+
+                return Expression.New(typeof(JValue).GetConstructor(new Type[] { typeof(string) }), Expression.Constant(token.Text.Trim('"')));
             }
             else
             {

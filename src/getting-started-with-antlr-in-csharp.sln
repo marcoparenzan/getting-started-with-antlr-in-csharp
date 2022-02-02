@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseJson", "ParseJson\Pars
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseExpressions", "ParseExpressions\ParseExpressions.csproj", "{445B97BB-2D84-49BB-A52B-0D6F9932B927}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseJameson", "ParseJameson\ParseJameson.csproj", "{7AB73654-868F-467B-B12D-4571D80E1DB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{445B97BB-2D84-49BB-A52B-0D6F9932B927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB73654-868F-467B-B12D-4571D80E1DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB73654-868F-467B-B12D-4571D80E1DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB73654-868F-467B-B12D-4571D80E1DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB73654-868F-467B-B12D-4571D80E1DB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ParseExpressions
 {
-    public class ExpressionContext
+    public class ExpressionsContext
     {
         public int alpha(int a, int b)
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParseJson
+namespace ParseJameson.Model
 {
     public abstract class JItem
     {
